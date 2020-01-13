@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     RecyclerView recyclerView;
-    EditText edtSearch=findViewById(R.id.edtSearch);
-    Button btnSearch=findViewById(R.id.btnSearch);
+    EditText edtSearch;
+    Button btnSearch;
     SearchAdapter adapter;
 
     @Override
@@ -32,13 +32,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView=findViewById(R.id.search);
+        bindViews();
         adapter= new SearchAdapter();
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this,RecyclerView.VERTICAL,false));
 
 
 
+
+    }
+
+
+    public void bindViews(){
+
+        recyclerView=findViewById(R.id.search);
+        edtSearch=findViewById(R.id.edtSearch);
+        btnSearch=findViewById(R.id.btnSearch);
 
     }
 
@@ -56,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         super.onSuccess(statusCode, headers, response);
-                        Log.i("Response", response.toString());
                         Gson gson = new Gson();
                         MovieSearch result = gson.fromJson(response.toString(), MovieSearch.class);
                         adapter.setResultItems(result.getResults());
@@ -68,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                 });
+                break;
 
 
         }

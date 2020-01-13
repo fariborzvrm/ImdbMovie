@@ -43,7 +43,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
     public void setResultItems(List<Result> resultItems) {
         this.resultItems = resultItems;
-        notifyDataSetChanged();
+
     }
 
     @Override
