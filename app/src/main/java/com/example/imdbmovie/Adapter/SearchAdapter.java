@@ -1,14 +1,15 @@
-package com.example.imdbmovie;
+package com.example.imdbmovie.Adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.imdbmovie.pojo.MovieSearch;
+import com.example.imdbmovie.R;
 import com.example.imdbmovie.pojo.Result;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.List;
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {
 
     List<Result> resultItems = new ArrayList<>();
+    AdapterItemClicked itemCLicked = null;
 
 
     @NonNull
@@ -29,15 +31,25 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SearchViewHolder holder, final int position) {
 
 
         holder.txtMovieTitle.setText(resultItems.get(position).getTitle());
         holder.txtMovieRate.setText(String.valueOf(resultItems.get(position).getVoteAverage()));
         holder.txtMovieDesc.setText(resultItems.get(position).getOverview());
+        holder.linearSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemCLicked.itemClicked(resultItems.get(position).getId());
+            }
+        });
 
 
 
+    }
+
+    public void setAdapterItemClicked(AdapterItemClicked itemClicked){
+        this.itemCLicked =itemClicked;
     }
 
 
@@ -51,9 +63,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         return resultItems.size();
     }
 
+    public  interface AdapterItemClicked{
+        public void itemClicked(int Id);
+    }
+
     class SearchViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtMovieTitle,txtMovieRate,txtMovieDesc;
+        LinearLayout linearSearch;
 
         public SearchViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -61,6 +78,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             txtMovieTitle=itemView.findViewById(R.id.txtMovieTitle);
             txtMovieRate=itemView.findViewById(R.id.txtMovieRate);
             txtMovieDesc=itemView.findViewById(R.id.txtMovieDesc);
+            linearSearch=itemView.findViewById(R.id.linearSearch);
 
         }
     }

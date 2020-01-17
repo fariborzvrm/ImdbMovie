@@ -4,12 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.imdbmovie.Adapter.SearchAdapter;
 import com.example.imdbmovie.pojo.MovieSearch;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
@@ -19,7 +20,7 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements SearchAdapter.AdapterItemClicked  {
 
 
     RecyclerView recyclerView;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this,RecyclerView.VERTICAL,false));
 
 
+click();
 
 
     }
@@ -48,18 +50,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView=findViewById(R.id.search);
         edtSearch=findViewById(R.id.edtSearch);
         btnSearch=findViewById(R.id.btnSearch);
+        adapter.setAdapterItemClicked(this);
 
     }
 
 
-    @Override
-    public void onClick(View view) {
 
-        switch (view.getId()){
-            case R.id.btnSearch:
-
-                AsyncHttpClient asyncHttpClient= new AsyncHttpClient();
-                String address="https://api.themoviedb.org/3/search/movie?api_key=544724643e5ac4e6d434f20524e10921&language=en-US&query="+edtSearch.getText().toString()+"&page=1&include_adult=false";
+    public void click() {
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+                String address = "https://api.themoviedb.org/3/search/movie?api_key=6f35b1bfbbde79225a8a057b3e5818b9&language=en-US&query=" + edtSearch.getText().toString() + "&page=1&include_adult=false";
 
                 asyncHttpClient.get(address, new JsonHttpResponseHandler() {
                     @Override
@@ -76,10 +78,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                 });
-                break;
+
+            }
+        });
+
+    }
 
 
-        }
+    @Override
+    public void itemClicked(int Id) {
+        Intent intent =new Intent(MainActivity.this,DetailsActivity.class);
+        intent.putExtra(Statics.TAG_ITEM_ID,Id);
+        startActivity(intent);
 
     }
 }
+
